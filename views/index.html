@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>The Curious Corner of the internet</title>
+	<link rel="stylesheet" type="text/css" href="reset.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
+
+	<script src="jquery.min.js" type="text/javascript" charset="utf-8"></script>
+
+	<script src="vex.combined.min.js"></script>
+	<script>vex.defaultOptions.className = 'vex-theme-wireframe';</script>
+	<link rel="stylesheet" href="vex.css" />
+	<link rel="stylesheet" href="vex-theme-wireframe.css" />
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+	  	$(".add").click(function(){
+
+		  	var v = $(this).siblings();
+		  	var t = $(v[0]).text();
+		  	var l = $(v[1]).attr("href");
+		  	
+		  	vex.dialog.open({
+				message: 'Add this link to the new edition',
+				input: "<input name=\"title\" type=\"text\" placeholder=\"Title\" value='" + t + "' required />\n<input name=\"url\" type=\"url\" placeholder=\"URL\" value='" + l + "' required /><textarea name='description' required placeholder=\"Description\"></textarea>",
+
+				buttons: [
+					$.extend({}, vex.dialog.buttons.YES, {
+					  	text: 'Add link'
+					}), $.extend({}, vex.dialog.buttons.NO, {
+					  	text: 'Cancel'
+					})
+				],
+
+				callback: function(data) {
+					if (data === false) {
+						return console.log('Cancelled');
+					}
+					console.log('Adding: ' + data.url);
+					var c = '<li><a href="'+ data.url +'">' + data.title + '</a> ' + data.description + '</li>';
+					$('#code').val($('#code').val() + c); 
+					$('#preview').append(c)
+				}
+			});
+	  	});
+
+
+		$("#step2").click(function(){
+			var listing = $('#code').val();
+			console.log('Moving to step 2.');
+
+			$('.content').fadeOut( "slow", function() {
+				$('#listing').val('<ul>' + listing + '</ul>');
+    			$('.content2').fadeIn( "slow");
+    		});	
+		});
+
+		$('.textarea').keyup(function() {
+			var e = '<div id="example"><p>' + $("#preface").val() + '</p><p>' + $("#listing").val()  + '</p><p>' +  $("#closing").val()  + '</p></div>'
+			$("#example").replaceWith(e);
+		});
+
+		$('#edition-number').keyup(function(){
+			$('#edition').html($('#edition-number').val());
+		});
+
+		$("#step3").click(function(){
+			$('.content2').fadeOut( "slow", function() {
+    			var example = $('#example').html()
+    			$('#total-code').val(example);
+    			$('.content3').fadeIn( "slow");
+    		});	
+		});
+
+	});
+	</script>
+</head>
+<body>
+
+<div class="wrapper">
+
+	<h1>Managing the Curious Corner of the internet..</h1>
+
+	<div class="menu">
+		<a href="/">Home</a>
+		<a href="#">Add</a>
+		<a href="#">Settings</a>
+	</div>
+
+	<div class="content">
+		<div class="list">
+		<h3>Current list of links</h3>
+		<p>Find the most interesting links for this edition below: </p>
+			<ul>
+				{% for url in urls %}
+				<div class="item">
+					<li>{{ url.title }}</li>	
+					<a class="add" >&#10010;</a>
+					<a class="read" target="_blank" href="{{ url.url }}">&#8230;</a>
+				</div>
+				{% endfor %}
+			</ul>
+		</div>
+
+		<div class="email">
+			<h3>Mailchimp code</h3>
+			<p>Preview:</p><br />
+			<ul id="preview">
+				
+			</ul>
+			<br />
+
+			<p>Copy paste to code to Mailchimp for now:</p>
+			
+			<textarea id="code" placeholder="Code is generated here!"></textarea>
+			<a class="next" id="step2">Next step</a>
+		</div>
+	</div>
+	
+	<div class="content2">
+
+		<div class="left">
+			<h3>Complete the template</h3>
+			<p>Edition: <input placeholder="#" id="edition-number"></p>
+			<p>Add preface here: </p>
+			<textarea class="textarea" id="preface"></textarea>
+			<p>Change the list</p>
+			<textarea class="textarea" id="listing"></textarea>
+			<p>Want to say anything in the footer?</p>
+			<textarea class="textarea" id="closing"></textarea>
+		</div>
+		<div class="right">
+			<h1>The Curious Corner #<span id="edition"></span></h1>
+			<div id="example">
+			
+			</div>
+			<a class="next" id="step3">Get the code</a>
+		</div>
+	</div>
+
+	<div class="content3">
+		<p>Final Code here! Paste this into the mailchimp template!</p>
+		<textarea id="total-code"></textarea>
+	</div>
+	
+</div>
+
+
+</body>
+</html>

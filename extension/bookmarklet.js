@@ -1,0 +1,1 @@
+( function(){ window.open('http://localhost:9191/add/' + encodeURIComponent(document.location.href) + '/' + encodeURIComponent(document.title) ) })();
