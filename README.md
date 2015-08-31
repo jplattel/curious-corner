@@ -1,6 +1,6 @@
-Note: 
 
-  Deprecated and replaced by a Django app, feel free to use this anyway you like.
+
+> *Note:*  Deprecated and replaced by a Django app, feel free to use this anyway you like.
 
 
 Managing The Curious Corner of the Internet
